@@ -1,6 +1,6 @@
 # serverless.yml
 
-service: sqs-triggers-demo
+service: sqs-triggers-demo-old-fashioned
 
 provider:
   name: aws
@@ -11,8 +11,10 @@ provider:
     - Effect: "Allow"
       Action:
         - "sqs:SendMessage"
+        - "sqs:ReceiveMessage"
+        - "sqs:DeleteMessage"
         - "sqs:GetQueueUrl"
-      Resource: "arn:aws:sqs:${self:provider.region}:811338114639:MyQueue"
+      Resource: "arn:aws:sqs:${self:provider.region}:811338114639:MyQueue2"
     - Effect: "Allow"
       Action:
         - "sqs:ListQueues"
@@ -29,19 +31,15 @@ functions:
   receiver:
     handler: receiver.handler
     events:
-      - sqs:
-          arn:
-            Fn::GetAtt:
-              - MyQueue
-              - Arn
+      - schedule: rate(1 minute)
 
 resources:
   Resources:
     MyQueue:
       Type: "AWS::SQS::Queue"
       Properties:
-        QueueName: "MyQueue"
+        QueueName: "MyQueue2"
 
 
-# export QUEUE_URL=`aws sqs get-queue-url --queue-name MyQueue --query 'QueueUrl' --output text --profile=sls`
+# export QUEUE_URL=`aws sqs get-queue-url --queue-name MyQueue2 --query 'QueueUrl' --output text --profile=sls`
 # aws sqs send-message --queue-url ${QUEUE_URL} --message-body "test" --profile=sls

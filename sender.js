@@ -8,7 +8,7 @@ exports.handler = function(event, context, callback) {
 
   
     var accountId = context.invokedFunctionArn.split(":")[4];
-    var queueUrl = 'https://sqs.us-east-1.amazonaws.com/' + accountId + '/MyQueue';
+    var queueUrl = 'https://sqs.us-east-1.amazonaws.com/' + accountId + '/MyQueue2';
 
     // response and status of HTTP endpoint
     var responseBody = {
